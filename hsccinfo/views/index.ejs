@@ -1,38 +1,24 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <style> 
-      h2 {color: rgb(255, 0, 0)}
-    </Style>
-  </head>
+  <!-- head partial gets included here -->
+  >%- include('./partials/head') -%>
   <body>
-    <!-- This is our horizontal navbar -->
-    <ul class="menu">
-      <li><a href="/"> <img src="images/bdpalogo.png" height="25">    </a></li>
-    <li><a href="/"> Home </a></li>
-    <li><a href="/bdpahistory"> BDPA History</a></li>
-    <li><a href="#"> Sample Form </a></li>
-    </ul>
-     <!-- End Navbar -->
-    <br><br><br>
+    <!-- Include menu here -->
+    >%- include('./partials/menu') -%>
 
-
-
-
-
-
-
+    <!-- Basic Intro -->
     <h1> Welcome to BDPA 2025 </h1>
     <h2> My name is ATHENS </h2>
-    <p>This page will be a intro to the HSCC program <%= title %></p>
+    <p style="color:green; background-color:white"> This page will be an intro to the HSCC program </p>
     <h2> Hyperlinks </h2>
+    <!-- Unordered list of links -->
     <ul>
-    <li>   <a href="http://www.bdpa.org"> BDPA National </a> </li>
-    <li>   <a href="http://www.bdpamke.org"> BDPA Milwaukee </a> </li>
-    <li>   <a href="http://www.w3schools.com"> W3Schools </a> </li>
-    <li>   <a href="/bdpahistory"> BDPA History </a> </li>  
+      <li> BDPA National <a href="http://www.bdpa.org"&gt; LINK </a> </li>
+      <li> BDPA Milwaukee <a href="http://www.bdpamke.org"&gt; LINK </a> </li>
+      <li> W3Schools <a href="http://www.w3schools.com"&gt; LINK </a> </li>
+      <li> BDPA History <a href="/bdpahistory"> LINK </a> </li>
+
     </ul>
+    <!-- End of unordered list -->
   </body>
 </html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<!-- Include standard head partial -->
+<%- include('./partials/head') -%>
+
+<body>
+<!-- Including menu -->
+ <%- include('./partials/menu') -%>
+
+ <h1> Sample form results </h1>
+ <!-- Taking ln and fn parameters from res.render in formentry post -->
+ <p> Name: <%= ln %>, <%= fn %> </p>
+ <p> Email: <%= em %> </p>
+ <p> Total: <%= total %> </p>
+ 
+
+
+</body>
+
+</html>

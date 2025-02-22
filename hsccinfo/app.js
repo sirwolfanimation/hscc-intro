@@ -1,29 +1,40 @@
+// Including required node packages
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+// Including .env file
+require('dotenv').config();
 
+// Creating routers which are linked to files in routes folder
+// MUST ADD ROUTER CONNECTIONS AS WE ADD ROUTE FILES HERE
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var bdpahistoryRouter = require('./routes/bdpahistory');
+var formentryRouter = require('./routes/formentry');
 
+// Setting up Express app
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// Directory setup
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+// Connect links to router objects
+// MUST ADD AS WE ADD NEW ROUTERS AND FILES
+app.use('/', indexRouter);  //Note that index router connects with /.  
+// If we want to have an /index link, we will need to add app.use('/index', indexRouter);
 app.use('/users', usersRouter);
 app.use('/bdpahistory', bdpahistoryRouter);
-
+app.use('/formentry', formentryRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
