@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <!-- head partial gets included here -->
+  <%- include('./partials/head') -%> 
+
+  <body>
+    <!-- Include menu here -->
+    <%- include('./partials/menu') -%>
+
+    <h1> Create an election </h1>
+    <form name="ElectionForm" action="/createelection" method="POST">
+      <div class="row">
+        <div class="col">
+          <label for="title">Title: </label>
+          <input class="form-control" type="text" name="title" id="title" required>
+        </div>
+      </div>
+
+        
+        <p>Select the type of election:
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="type" id="irv" value="irv" checked>
+              <label class="form-check-label" for="irv"> Instant Runoff </label>
+            </div>
+            <div class="form-check">
+            <input class="form-check-input" type="radio" name="type" id="cpl" value="cpl">
+            <label class="form-check-label" for="cpl"> Head-to-Head Comparisons </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="radio" name="type" id="fptp" value="fptp">
+            <label class="form-check-label" for="fptp"> First-Past-The-Post (plurality) </label>
+</div>
+<div class="form-check"> 
+            <input class="form-check-input" type="radio" name="type" id="star" value="star">
+            <label class="form-check-label" for="star"> Star approval and runoff </label>
+            </div>
+        </p>
+
+<div class="row">
+  <div class="col">
+    <label for="description">Description: </label>
+    <input class="form-control" type="text" name="description" id="description" required>
+  </div>
+</div>
+
+
+        <br>
+        <p>Voting Options:</p>
+        <!-- Will need to address how many options we will need.  We'll set up one for now -->
+        <div id="optionsContainer">
+          <div class="row" id="optionsWrapper">
+            <input class="form-control" type="text" name="option1" id="option1" required>
+            <!-- <button class="removeButton">Remove Option</button> -->
+          </div>
+        </div>
+        
+        <!-- Button to add a field -->
+        <button id="addButton">Add Field</button>
+
+        <!-- Create Javascript code to add or remove options fields -->
+        <script>
+          document.getElementById('addButton').addEventListener('click',function(event){
+            event.preventDefault(); //prevents click the button from submitting the form
+            //alert('clicked add field button');
+            var inputContainer=document.getElementById('optionsContainer');
+            var newInputWrapper=document.createElement('div');
+            newInputWrapper.classList.add('row');
+            newInputWrapper.classList.add('optionsWrapper');
+
+
+            var newOption=document.createElement('input');
+   
+            newOption.type='text';
+            newOption.id='option'+(inputContainer.children.length+1);
+            newOption.name='option'+(inputContainer.children.length+1);
+            newOption.classList.add("form-control")
+            newOption.classList.add('col')
+            newInputWrapper.appendChild(newOption);
+
+            var newButton = document.createElement('button');
+            newButton.textContent = 'Remove';
+            newButton.classList.add('removeButton');
+            newButton.classList.add('col')
+            newButton.addEventListener('click', function(event) {
+              event.preventDefault();
+              event.target.parentNode.remove();
+            });//END of Remove button event listener
+
+            newInputWrapper.appendChild(newButton);
+
+            inputContainer.appendChild(newInputWrapper);
+          }); //END OF EVENT LISTENER
+        </script>
+
+        <br>
+        <div class="row">
+          <div class="col">
+            <label for="openingtime"> Opening Date/Time (UTC) </label>
+            <input class="form-control" type="datetime-local" name="openingtime" id="openingtime" required>
+          </div>
+        
+<div class="col">
+        <label for="closingtime"> Closing Date/Time (UTC) </label>
+        <input class="form-control" type="datetime-local" name="closingtime" id="closingtime" required>
+      </div>
+      </div>
+
+        <input type="submit" value="Submit form">
+    </form>
+
+  </body>
+</html>
