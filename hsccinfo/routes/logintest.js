@@ -1,16 +1,18 @@
 var express = require('express');
 var router = express.Router();
 var jwt=require('jsonwebtoken');
+const auth=require("../middleware/verifyToken");
+
 
 const Encrypter=require("../middleware/PasswordEncrypt");
 const MongoClient=require("../middleware/MongoClient");
 /* GET register page. */
-router.get('/', function(req, res, next) {
-  res.render('logintest', { title: 'Test Login Page' ,message:'' });
+router.get('/', auth,function(req, res, next) {
+  res.render('logintest', { title: 'Test Login Page' ,message:'',username: res.locals.name, role: res.locals.role });
 });
 
 // POST register form
-router.post('/', function(req, res, next) {
+router.post('/', auth,function(req, res, next) {
   let name=req.body.username;
   let pwd=req.body.pwd;
   const client=MongoClient.CreateMongoClient();
@@ -24,7 +26,7 @@ router.post('/', function(req, res, next) {
         const result= await collection.findOne( { username: name } )
         console.log(result)
         if (result===null){
-          res.render('logintest',{title:'Login failed',message:'Login and password not found'})
+          res.render('logintest',{title:'Login failed',message:'Login and password not found',username: res.locals.name, role: res.locals.role})
         }
         else {
           salt=result.salt
@@ -48,12 +50,24 @@ router.post('/', function(req, res, next) {
             )
             if (process.env.CONSOLE_DEBUG){
               console.log(token)
+              console.log(req.ip)
+              const currentTime = new Date();
+              console.log(currentTime);
+              console.log(`Current time is: ${currentTime.toLocaleString()}`);
             }
             global.userToken=token
-            res.render('logintest',{title:"Successful login",message:"Welcome "+name})
+            var IParray=result.lastIP
+            IParray.unshift(req.ip)
+            IParray=IParray.slice(0, 5);
+            var loginTimearray=result.lastLoginTime
+            loginTimearray.unshift(new Date())
+            loginTimearray=loginTimearray.slice(0,5)
+
+            const updateresult=await collection.updateOne({username:name},{$set:{lastIP:IParray,lastLoginTime:loginTimearray}})
+            res.redirect('dashboard')
           }
           else{
-            res.render('logintest',{title:'Login failed',message:'Login and password not found'})
+            res.render('logintest',{title:'Login failed',message:'Login and password not found',username: res.locals.name, role: res.locals.role})
           }
         }
     } finally {

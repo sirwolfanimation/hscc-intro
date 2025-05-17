@@ -1,13 +1,17 @@
 var express = require('express');
 var router = express.Router();
 const APIRequests=require("../middleware/APIRequests");
+const auth=require("../middleware/verifyToken");
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  if (process.env.CONSOLE_DEBUG=="true"){
-    console.log("Debugging enabled!");
+router.get('/', auth, function(req, res, next) {
+  if (res.locals.role && ((res.locals.role=="super") || (res.locals.role=="administrator")))
+  {
+    res.render('createelection', { title: 'Create an Election' });
   }
-  res.render('createelection', { title: 'Create an Election' });
+  else{
+     res.render('logintest', { title: 'Please log in',message:'You need to log in to access page' });
+  }
 });
 
 router.post('/', function(req, res, next) {
@@ -40,7 +44,7 @@ router.post('/', function(req, res, next) {
         else{
           optionsarray.push(option)
         }
-        
+       
       }
     }
     //Now that we have our options, we can start to set up the post request.
@@ -58,7 +62,7 @@ router.post('/', function(req, res, next) {
       opensAt:openingmilliseconds,
       closesAt:closingmilliseconds
     }
-    const url = 'https://elections-cpl.api.hscc.bdpa.org/v1/elections'
+    const url = 'https://elections-cpl.api.hscc.bdpa.org/v1/elections';
     const token = process.env.BEARER_TOKEN;
 
     //Submit post request
@@ -67,12 +71,12 @@ router.post('/', function(req, res, next) {
             if (process.env.CONSOLE_DEBUG=="true"){
                 console.log("REST CALL ", data);
             }
-            
+           
             if (data.success){
-                
+               
               res.render('createelection', { title: 'Created an Election Successfully' });
             } // closes if statement
-    
+   
             else{
                 res.render('error', {title: 'Election post failed',
                 message: data.error,
@@ -83,7 +87,7 @@ router.post('/', function(req, res, next) {
 
 
 
-    
+   
   });
 //Gratuitous comment
 module.exports = router;

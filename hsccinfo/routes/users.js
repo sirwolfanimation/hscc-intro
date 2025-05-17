@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const auth=require("../middleware/verifyToken");
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {

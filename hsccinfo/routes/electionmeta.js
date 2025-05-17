@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const APIRequests=require("../middleware/APIRequests");
+const auth=require("../middleware/verifyToken");
 
 // GET Electionsmeta page.
 router.get('/', function(req, res, next) {

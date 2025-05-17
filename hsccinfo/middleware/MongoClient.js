@@ -10,6 +10,7 @@ module.exports={
             version: ServerApiVersion.v1,
             strict: true,
             deprecationErrors: true,
+            
             }
         });
         return client;
